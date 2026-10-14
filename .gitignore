@@ -1,0 +1,11 @@
+/data/
+/figures/
+/smoke-data/
+/smoke-figures/
+/supp-smoke-data/
+/supp-smoke-figures/
+/.validation/
+*.zip
+*.mp4
+.DS_Store
+Thumbs.db

@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "Please cite the paper and the version-specific Zenodo software and dataset DOIs. Add the published identifiers here before release."
+type: software
+title: "AmpDefInc: reproduction code for amplitude defects in heterogeneous Stuart–Landau oscillators"
+authors:
+  - family-names: "Thomé"
+    given-names: "Nicolas"
+version: 1.0.0
+license: MIT
