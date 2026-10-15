@@ -33,7 +33,6 @@ const K_TICKS = ([0.85, 0.90, 0.95, 1.0], ["0.85", "0.90", "0.95", "1.00"])
 const LOW_CLUSTER_R_MIN_THRESHOLD = 0.05
 const HOPF_BASELINE_MIN_K = 0.975
 const HOPF_PROXY_THRESHOLD = 0.015
-const R_ZERO_THRESHOLD = 0.004
 const HIGHLIGHT_LINE_PT = 0.88
 const HIGH_AMPLITUDE_LINE_PT = 1.33
 const HIGH_AMPLITUDE_MARKER_PT = 1.45 * MARKER_PT
@@ -372,6 +371,15 @@ function first_along_decreasing_k(k_values, values, predicate)
     return NaN
 end
 
+function closest_to_zero_k(k_values, values)
+    # Resolve equal minima in favor of the first point along decreasing K.
+    order = sortperm(k_values; rev = true)
+    finite_order = filter(idx -> isfinite(values[idx]), order)
+    isempty(finite_order) && return NaN
+    closest = finite_order[argmin(abs.(values[finite_order]))]
+    return k_values[closest]
+end
+
 function transition_ticks(k_hb, k_ad)
     return K_TICKS
 end
@@ -414,13 +422,13 @@ function selected_low_cluster_oscillators(k_values, min_radius, max_radius, omeg
     k_0 = fill(NaN, size(min_window, 2))
     for idx in low_cluster
         k_h[idx] = first_along_decreasing_k(k_window, hopf_proxy[:, idx], value -> value > HOPF_PROXY_THRESHOLD)
-        k_0[idx] = first_along_decreasing_k(k_window, min_window[:, idx], value -> value <= R_ZERO_THRESHOLD)
+        k_0[idx] = closest_to_zero_k(k_window, min_window[:, idx])
     end
 
     finite_hopf = [idx for idx in low_cluster if isfinite(k_h[idx])]
     finite_zero = [idx for idx in low_cluster if isfinite(k_0[idx])]
     isempty(finite_hopf) && error("No Hopf-onset proxy crossings found in the low-amplitude cluster.")
-    isempty(finite_zero) && error("No r_min zero crossings found in the low-amplitude cluster.")
+    isempty(finite_zero) && error("No finite r_min minima found in the low-amplitude cluster.")
 
     first_hopf = finite_hopf[argmax(k_h[finite_hopf])]
     last_zero = finite_zero[argmin(k_0[finite_zero])]
@@ -582,8 +590,8 @@ function main()
         vlines!(ax, [highlight_info.k_0_first_hopf]; color = :black, linestyle = :dashdot, linewidth = 1.15 * LINE_PT)
         vlines!(ax, [highlight_info.k_0_last_zero]; color = :black, linestyle = :dashdot, linewidth = 1.15 * LINE_PT)
     end
-    add_transition_label!(ax_minr, highlight_info.k_0_first_hopf, L"K_{\mathrm{def},\,1}"; side = :left)
-    add_transition_label!(ax_minr, highlight_info.k_0_last_zero, L"K_{\mathrm{def},\,N^\prime}"; side = :left)
+    add_transition_label!(ax_minr, highlight_info.k_0_first_hopf, L"K_{\mathrm{ps},\,1}"; side = :left)
+    add_transition_label!(ax_minr, highlight_info.k_0_last_zero, L"K_{\mathrm{ps},\,N^\prime}"; side = :left)
     add_transition_label!(ax_minr, highlight_info.k_h_first, L"K_{\mathrm{HB}}"; side = :right)
 
     Colorbar(
@@ -645,7 +653,7 @@ function main()
 
     save(joinpath(OUTPUT_ROOT, "Fig_2.png"), fig; px_per_unit = 3)
     save(joinpath(OUTPUT_ROOT, "Fig_2.pdf"), fig)
-    @info "Saved Figure 2" K_HB=highlight_info.k_h_first K_def=highlight_info.k_0_first_hopf
+    @info "Saved Figure 2" K_HB=highlight_info.k_h_first K_ps_1=highlight_info.k_0_first_hopf K_ps_last=highlight_info.k_0_last_zero
 end
 
 end
