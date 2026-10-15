@@ -35,18 +35,38 @@ data/
 Include Figure 1's large experimental file in a separately documented directory
 in the Zenodo record. No script in this repository reads that file.
 
-## Provenance
+## Figure inputs
 
-The source continuation dataset is
-`C1_-0.5_C2_m7_Hopf_all_N_5000_threshold_0p7_Rfreq`.
-All 151 restarts report N=5000, 5000 frequencies and 10000 real state components.
-The old constant containing `N10000` pointed to this N=5000 dataset and was a
-naming error. The current development script with N=2000 is not the paper configuration.
+| Figure | Data |
+| --- | --- |
+| 1 | Separately supplied raw experimental data; no plotting script |
+| 2 | Continuation frequencies and radius extrema; `9_points.xlsx` and `minR_meanF_cont.xlsx` |
+| 3 | Rotating-frame trajectories in `fig3_rotating_frame.jld2` |
+| 4 | Numerical spectra in `fig4_fft.jld2`; experimental spectra in `FC_FFT_data.xlsx` |
+| 5 | Continuation frequencies, minimum radii and cluster order parameters |
 
-The three experimental workbooks come from the original Figure 2 and Figure 4
-directories. Preserve workbook sheet order and the measured values.
-`9_points.xlsx` supplies the selected experimental oscillator curves;
-`minR_meanF_cont.xlsx` remains the companion measurement input read by Figure 2.
+Preserve experimental workbook sheet order and measured values. Supplementary
+inputs are described in [SUPPLEMENTARY.md](SUPPLEMENTARY.md).
+
+## Main simulation parameters
+
+| Setting | Value |
+| --- | --- |
+| Oscillators | N = 5000 |
+| Coupling sweep | K = 1.0 to 0.85, 151 points, decreasing |
+| C1, C2 | −0.5, −7.0 |
+| Transient | 3000 at every K, including the first |
+| Recording time / sampling interval | 600 / 0.1 |
+| Relative / absolute tolerance | 1e−8 / 1e−8 |
+| Frequency distribution | Gaussian, mean 0, standard deviation 0.3, symmetric pairs |
+| Frequency seed / initial-state seed | 1234 / 5678 |
+| Continuation noise | 0 |
+| Amplitude-cluster threshold | 0.7 |
+| Cluster diagnostic relative / absolute tolerance | 1e−4 / 1e−4 |
+
+Each coupling point starts from the preceding final state. Preserve sweep order,
+oscillator ordering and seeds to reproduce the selected branch. Figure 5 uses
+the mean-frequency order parameter and transition markers K_HB=0.963 and K_def=0.948.
 
 ## Formats
 
