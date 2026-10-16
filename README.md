@@ -40,8 +40,6 @@ julia --project=. scripts/plot_figures.jl --figures 2,6 --data-dir /path/to/data
 
 Quote paths containing spaces. Commands also work in PowerShell. Supplementary
 figure IDs and inputs are listed in [SUPPLEMENTARY.md](docs/SUPPLEMENTARY.md).
-The default font is Times New Roman when available in the Windows font directory,
-otherwise TeX Gyre Heros Makie. Override it with `PHASINGINC_FONT`.
 
 ## Regenerate numerical data
 
