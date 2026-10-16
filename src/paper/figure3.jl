@@ -1,5 +1,5 @@
 module Figure3
-using ..AmpDefInc
+using ..PhaSingInc
 using CairoMakie
 using JLD2
 using LaTeXStrings
@@ -34,7 +34,7 @@ const MARKER_PT = 6.5
 
 const DARK_BLUE = RGBf(0.0, 0.0, 0.46)
 
-const PAPER_FONT = AmpDefInc.PAPER_FONT
+const PAPER_FONT = PhaSingInc.PAPER_FONT
 
 function restart_file_for_K(K::Real)
     files = filter(name -> startswith(name, "K_continuation_K_") && endswith(name, ".jld2"), readdir(RESTART_DIR))
@@ -117,7 +117,7 @@ function simulate_complex_trajectories(
     p = (restart.K, restart.C1, restart.C2, restart.omega)
     final_time = Float64(trajectory_Ttr) + Float64(trajectory_T)
     record_times = Float64(trajectory_Ttr) .+ sample_times(trajectory_T; dt = trajectory_dt)
-    prob = SciMLBase.ODEProblem(AmpDefInc.Model.sl_harmo_hetero!, restart.u0, (0.0, final_time), p)
+    prob = SciMLBase.ODEProblem(PhaSingInc.Model.sl_harmo_hetero!, restart.u0, (0.0, final_time), p)
     sol = SciMLBase.solve(
         prob,
         OrdinaryDiffEqTsit5.Tsit5();

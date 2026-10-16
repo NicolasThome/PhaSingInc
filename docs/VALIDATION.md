@@ -10,12 +10,19 @@ Checks completed on Windows with Julia 1.12.1 on 13 October 2026:
   frequencies and the final state exactly.
 - Figure 3 trajectories were recomputed from saved states. All 24 Figure 4
   numerical FFT arrays matched the archived spectra exactly.
-- All main and supplementary figures rendered as PDF and PNG. Figures 2, 3, 5
-  and the supplementary plots matched reference PNGs pixel-for-pixel on this
-  installation; Figure 4 was visually checked.
+- The four numerical main figures and supplementary plots rendered as PDF and
+  PNG and were checked against the source figures.
 - Installation, tests, small-data generation and plotting worked in a standalone
   copy. A supplementary stability check at N=12 completed three points with
   equilibrium residuals below 3e−15.
+
+## PhaSingInc update, 16 October 2026
+
+All 63 test assertions passed after the package rename. Main and supplementary
+smoke pipelines completed. Figures 2, 3, 4 and 6 and all five supplementary
+outputs rendered from the research data, with Figure 3/4 derived data recomputed.
+The temporary validation workbook used the documented I=0.89 worksheet label.
+Figure 6 now uses the same sampled phase-singularity marker as Figure 2 (K=0.947).
 
 ## Limits
 

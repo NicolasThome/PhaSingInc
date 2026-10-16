@@ -1,13 +1,13 @@
 __precompile__(false)
-module AmpDefInc
+module PhaSingInc
 
 using Distributions, Random, Statistics, JLD2, FFTW, SHA
 import OrdinaryDiffEqTsit5, SciMLBase
 
 const ROOT = dirname(@__DIR__)
-const DATA_ROOT = abspath(get(ENV, "AMPDEFINC_DATA", joinpath(ROOT, "data")))
-const OUTPUT_ROOT = abspath(get(ENV, "AMPDEFINC_OUTPUT", joinpath(ROOT, "figures")))
-const PAPER_FONT = get(ENV, "AMPDEFINC_FONT", let
+const DATA_ROOT = abspath(get(ENV, "PHASINGINC_DATA", joinpath(ROOT, "data")))
+const OUTPUT_ROOT = abspath(get(ENV, "PHASINGINC_OUTPUT", joinpath(ROOT, "figures")))
+const PAPER_FONT = get(ENV, "PHASINGINC_FONT", let
     font = joinpath(get(ENV, "WINDIR", ""), "Fonts", "times.ttf")
     isfile(font) ? font : "TeX Gyre Heros Makie"
 end)
@@ -49,7 +49,7 @@ end
 # Figure modules are loaded only after CLI input validation. They do not run
 # simulations or create figures when included.
 function load_figure(number::Integer)
-    number in 2:5 || error("Figure must be 2, 3, 4, or 5.")
+    number in MAIN_FIGURES || error("Figure must be 2, 3, 4, or 6. Raw data for Figures 1 and 5 are provided on Zenodo; no plotting scripts are included.")
     name = Symbol("Figure", number)
     if !isdefined(@__MODULE__, name)
         number == 4 && load_figure(2)

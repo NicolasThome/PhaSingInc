@@ -1,9 +1,22 @@
 cff-version: 1.2.0
-message: "Please cite the paper and the version-specific Zenodo software and dataset DOIs. Add the published identifiers here before release."
+message: "Please cite the paper and the version-specific Zenodo software and dataset DOIs."
 type: software
-title: "AmpDefInc: reproduction code for amplitude defects in heterogeneous Stuart–Landau oscillators"
+title: "PhaSingInc: reproduction code for Phase Singularities as a Route to Partial Incoherence – From Experiment to Theory"
 authors:
   - family-names: "Thomé"
     given-names: "Nicolas"
 version: 1.0.0
 license: MIT
+repository-code: "https://github.com/NicolasThome/PhaSingInc"
+preferred-citation:
+  type: article
+  title: "Phase Singularities as a Route to Partial Incoherence – From Experiment to Theory"
+  authors:
+    - family-names: "Thomé"
+      given-names: "Nicolas"
+    - family-names: "Murakami"
+      given-names: "Yukiteru"
+    - family-names: "Schöhs"
+      given-names: "Yannick"
+    - family-names: "Krischer"
+      given-names: "Katharina"

@@ -1,5 +1,5 @@
 module SupplementStability
-using ..AmpDefInc
+using ..PhaSingInc
 using CairoMakie
 using JLD2
 using LaTeXStrings
@@ -17,7 +17,7 @@ const LABEL_PT = 1.00 * LATEX_BASE_PT
 const PANEL_PT = 1.00 * LATEX_BASE_PT
 const RED = RGBf(0.86, 0.18, 0.12)
 
-const PAPER_FONT = AmpDefInc.PAPER_FONT
+const PAPER_FONT = PhaSingInc.PAPER_FONT
 
 function style_axis!(ax)
     ax.xgridvisible = true

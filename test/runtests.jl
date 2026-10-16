@@ -1,30 +1,30 @@
-using Test, AmpDefInc, Distributions, Random, Statistics, JLD2
+using Test, PhaSingInc, Distributions, Random, Statistics, JLD2
 import SciMLBase, OrdinaryDiffEqTsit5
 
 @testset "Model and seeded frequency sampling" begin
     u = [0.4, -0.3]
     du = zeros(2)
-    AmpDefInc.Model.sl_harmo_hetero!(du, u, (2.0, -0.5, -7.0, [0.2]), 0.0)
+    PhaSingInc.Model.sl_harmo_hetero!(du, u, (2.0, -0.5, -7.0, [0.2]), 0.0)
     r2 = sum(abs2, u)
     expected = [(1-r2)*u[1] - 0.2*u[2] - 7*r2*u[2],
                 (1-r2)*u[2] + 0.2*u[1] + 7*r2*u[1]]
     @test du ≈ expected
     for n in (31, 32)
-        omega = AmpDefInc.Model.sample_eigenfrequencies(MersenneTwister(1234), Normal(0, 0.3), n; omega_symmetry=:sym)
+        omega = PhaSingInc.Model.sample_eigenfrequencies(MersenneTwister(1234), Normal(0, 0.3), n; omega_symmetry=:sym)
         @test length(omega) == n
         @test sort(omega) ≈ sort(-omega)
         @test abs(mean(omega)) < 1e-15
-        @test omega == AmpDefInc.Model.sample_eigenfrequencies(MersenneTwister(1234), Normal(0, 0.3), n; omega_symmetry=:sym)
+        @test omega == PhaSingInc.Model.sample_eigenfrequencies(MersenneTwister(1234), Normal(0, 0.3), n; omega_symmetry=:sym)
     end
 end
 
 @testset "Streaming diagnostics agree with saved trajectories" begin
     cfg = smoke_config()
-    omega = AmpDefInc.Model.sample_eigenfrequencies(MersenneTwister(1234), Normal(0, 0.3), 32; omega_symmetry=:sym)
+    omega = PhaSingInc.Model.sample_eigenfrequencies(MersenneTwister(1234), Normal(0, 0.3), 32; omega_symmetry=:sym)
     u0 = rand(MersenneTwister(17), 64) .- 0.5
-    online = AmpDefInc.run_k_step_online_core(cfg, 0.95, omega, u0, 2)
-    times = AmpDefInc.sample_times(2, cfg.T, cfg.dt)
-    prob = SciMLBase.ODEProblem(AmpDefInc.Model.sl_harmo_hetero!, u0, (0.0, 4.0), (0.95, cfg.C1, cfg.C2, omega))
+    online = PhaSingInc.run_k_step_online_core(cfg, 0.95, omega, u0, 2)
+    times = PhaSingInc.sample_times(2, cfg.T, cfg.dt)
+    prob = SciMLBase.ODEProblem(PhaSingInc.Model.sl_harmo_hetero!, u0, (0.0, 4.0), (0.95, cfg.C1, cfg.C2, omega))
     sol = SciMLBase.solve(prob, OrdinaryDiffEqTsit5.Tsit5(); saveat=times,
         reltol=cfg.reltol, abstol=cfg.abstol)
     z = Array(sol)[1:2:end, :] .+ im .* Array(sol)[2:2:end, :]
@@ -39,7 +39,7 @@ end
 @testset "FFT normalization and frequency units" begin
     t = collect(0:0.01:9.99)
     signal = 3 .+ 2 .* sin.(2pi .* 1.0 .* t)
-    spectrum = AmpDefInc.fft_matrix(reshape(signal, :, 1), t;
+    spectrum = PhaSingInc.fft_matrix(reshape(signal, :, 1), t;
         detrend=true, window=nothing, spectrum=:amplitude, onesided=true, normalize=false)
     peak = argmax(vec(spectrum.spectra))
     @test spectrum.freqs[peak] ≈ 1.0 atol=1e-12
@@ -82,12 +82,15 @@ end
 end
 
 @testset "Main and supplementary selection" begin
-    @test AmpDefInc.parse_figure_selection("2,supp-kop,5") == ([2, 5], ["supp-kop"])
-    main, supp = AmpDefInc.parse_figure_selection("all")
-    @test main == collect(2:5)
-    @test supp == AmpDefInc.SUPPLEMENT_IDS
-    @test AmpDefInc.parse_figure_selection("supplementary")[1] == Int[]
-    @test_throws ErrorException AmpDefInc.parse_figure_selection("6")
+    @test PhaSingInc.parse_figure_selection("2,supp-kop,6") == ([2, 6], ["supp-kop"])
+    main, supp = PhaSingInc.parse_figure_selection("all")
+    @test main == [2, 3, 4, 6]
+    @test supp == PhaSingInc.SUPPLEMENT_IDS
+    @test PhaSingInc.parse_figure_selection("supplementary")[1] == Int[]
+    @test PhaSingInc.parse_figure_selection("6") == ([6], String[])
+    @test_throws ErrorException PhaSingInc.parse_figure_selection("1")
+    @test_throws ErrorException PhaSingInc.parse_figure_selection("5")
+    @test_throws ErrorException load_figure(5)
 end
 
 load_stability_engine()
@@ -96,13 +99,13 @@ load_stability_engine()
     n = 4
     state = repeat([1.0, 0.0], n)
     omega = zeros(n)
-    cfg = AmpDefInc.LockedSpectrumConfig(; K=1.0, C1=-0.5, C2=-7.0, N=n)
-    field = AmpDefInc.rotating_vector_field(state, cfg.K, cfg.C1, cfg.C2, omega, 7.0)
+    cfg = PhaSingInc.LockedSpectrumConfig(; K=1.0, C1=-0.5, C2=-7.0, N=n)
+    field = PhaSingInc.rotating_vector_field(state, cfg.K, cfg.C1, cfg.C2, omega, 7.0)
     @test field == zeros(2n)
-    equilibrium = AmpDefInc.solve_locked_equilibrium(cfg, omega, vcat(state, 7.0))
+    equilibrium = PhaSingInc.solve_locked_equilibrium(cfg, omega, vcat(state, 7.0))
     @test equilibrium.residual_norm < 1e-10
     @test equilibrium.Omega ≈ 7.0
-    spectrum = AmpDefInc.spectrum_diagnostics(cfg, state, 7.0, omega)
+    spectrum = PhaSingInc.spectrum_diagnostics(cfg, state, 7.0, omega)
     @test spectrum.J * spectrum.phase_tangent ≈ zeros(2n) atol=1e-12
     @test abs(spectrum.eigenvalues[spectrum.neutral_index]) < 1e-10
     @test spectrum.leading_index != spectrum.neutral_index
@@ -112,7 +115,7 @@ load_stability_engine()
 end
 
 @testset "Supplementary stability settings and spectra filtering" begin
-    cfg = AmpDefInc.supplementary_stability_config()
+    cfg = PhaSingInc.supplementary_stability_config()
     @test cfg.N == 5000
     @test cfg.K_steps == 51
     @test cfg.K_start == 1.0 && cfg.K_end == 0.95

@@ -1,5 +1,5 @@
 module SupplementTimeseriesBook2
-using ..AmpDefInc
+using ..PhaSingInc
 using CairoMakie
 using LaTeXStrings
 

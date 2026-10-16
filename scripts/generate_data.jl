@@ -5,7 +5,7 @@ if "help" in opts.flags
     exit()
 end
 
-using AmpDefInc
+using PhaSingInc
 
 if "smoke" in opts.flags && "skip-continuation" in opts.flags
     error("--smoke cannot be combined with --skip-continuation.")
@@ -24,7 +24,7 @@ if needs_stability
     if isfile(stability_path)
         "force" in opts.flags || error("Supplementary stability data already exist. Use --skip-stability to retain them, or --force to replace matching-N data.")
         expected_n = "smoke" in opts.flags ? 12 : 5000
-        old_n = AmpDefInc.JLD2.load(stability_path, "N")
+        old_n = PhaSingInc.JLD2.load(stability_path, "N")
         old_n == expected_n || error("Existing supplementary data have N=$old_n; requested N=$expected_n. Use a different --data-dir.")
     end
 end
@@ -38,7 +38,7 @@ if needs_primary && !("skip-continuation" in opts.flags)
     if existing && isdir(restart_dir)
         restarts = filter(name -> endswith(name, ".jld2"), readdir(restart_dir; join=true))
         if !isempty(restarts)
-            old_n = AmpDefInc.JLD2.load(first(restarts), "N")
+            old_n = PhaSingInc.JLD2.load(first(restarts), "N")
             old_n == cfg.N || error("Existing data have N=$old_n; requested N=$(cfg.N). Use a different --data-dir to keep paper and smoke data separate.")
         end
     end
@@ -63,9 +63,9 @@ if !("smoke" in opts.flags || "continuation-only" in opts.flags)
 end
 if needs_stability
     load_stability_engine()
-    config_fn = Base.invokelatest(getfield, AmpDefInc, :supplementary_stability_config)
+    config_fn = Base.invokelatest(getfield, PhaSingInc, :supplementary_stability_config)
     cfg = Base.invokelatest(config_fn; smoke = "smoke" in opts.flags)
-    generation_fn = Base.invokelatest(getfield, AmpDefInc, :run_hopf_spectrum_detection)
+    generation_fn = Base.invokelatest(getfield, PhaSingInc, :run_hopf_spectrum_detection)
     elapsed = @elapsed Base.invokelatest(generation_fn, cfg)
     println("Supplementary stability generation elapsed: $(round(elapsed; digits=2)) s.")
 end

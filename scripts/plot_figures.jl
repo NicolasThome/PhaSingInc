@@ -5,7 +5,7 @@ if "help" in opts.flags
     exit()
 end
 
-using AmpDefInc
+using PhaSingInc
 
 check_supplement_inputs(opts.supplements; plotting = true, smoke = "smoke" in opts.flags)
 

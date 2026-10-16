@@ -1,5 +1,5 @@
 module Figure2
-using ..AmpDefInc
+using ..PhaSingInc
 using XLSX
 using CairoMakie
 using Printf
@@ -42,7 +42,7 @@ const ILLUMINATION_TICKS = ([0.77, 0.81, 0.85, 0.89, 0.94, 1.0], ["0.77", "0.81"
 const FREQUENCY_TRANSITION_THRESHOLD = -0.3
 const DOTTED_EXPERIMENT_SHEETS = Set(["Sheet1", "Sheet3", "Sheet8"])
 
-const PAPER_FONT = AmpDefInc.PAPER_FONT
+const PAPER_FONT = PhaSingInc.PAPER_FONT
 
 function read_first_sheet_xlsx(path::AbstractString)
     book = XLSX.readxlsx(path)
@@ -380,7 +380,7 @@ function closest_to_zero_k(k_values, values)
     return k_values[closest]
 end
 
-function transition_ticks(k_hb, k_ad)
+function transition_ticks(k_hb, k_ps)
     return K_TICKS
 end
 

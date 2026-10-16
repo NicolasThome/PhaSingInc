@@ -15,6 +15,10 @@ Experimental workbooks belong in `data/supplementary/experimental/`; the spectru
 and its summary/recovery CSVs belong in `data/supplementary/numerical/`.
 The two stability IDs share a single generation calculation.
 
+The stability plots accompany manuscript Supplement S1, the amplitude-fit
+examples S2, and the experimental order parameters S5. Sections S3–S4 contain
+the analytical spectral explanation and FFT comparisons.
+
 ## Experimental plots
 
 The KOP plot reads measured order parameters. The time-series plots draw measured

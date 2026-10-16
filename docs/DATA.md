@@ -32,8 +32,8 @@ data/
   SHA256SUMS
 ```
 
-Include Figure 1's large experimental file in a separately documented directory
-in the Zenodo record. No script in this repository reads that file.
+Raw experimental data for Figures 1 and 5 are provided separately on Zenodo;
+no plotting scripts are included.
 
 ## Figure inputs
 
@@ -43,7 +43,8 @@ in the Zenodo record. No script in this repository reads that file.
 | 2 | Continuation frequencies and radius extrema; `9_points.xlsx` and `minR_meanF_cont.xlsx` |
 | 3 | Rotating-frame trajectories in `fig3_rotating_frame.jld2` |
 | 4 | Numerical spectra in `fig4_fft.jld2`; experimental spectra in `FC_FFT_data.xlsx` |
-| 5 | Continuation frequencies, minimum radii and cluster order parameters |
+| 5 | Separately supplied raw experimental data for topological defects; no plotting script |
+| 6 | Continuation frequencies, minimum radii and cluster order parameters |
 
 Preserve experimental workbook sheet order and measured values. Supplementary
 inputs are described in [SUPPLEMENTARY.md](SUPPLEMENTARY.md).
@@ -65,8 +66,10 @@ inputs are described in [SUPPLEMENTARY.md](SUPPLEMENTARY.md).
 | Cluster diagnostic relative / absolute tolerance | 1e−4 / 1e−4 |
 
 Each coupling point starts from the preceding final state. Preserve sweep order,
-oscillator ordering and seeds to reproduce the selected branch. Figure 5 uses
-the mean-frequency order parameter and transition markers K_HB=0.963 and K_def=0.948.
+oscillator ordering and seeds to reproduce the selected branch. Figure 6 uses
+the mean-frequency order parameter and transition markers K_HB=0.963 and K_ps,1=0.947.
+The latter is the sampled minimum amplitude of the first highlighted oscillator,
+matching Figure 2.
 
 ## Formats
 

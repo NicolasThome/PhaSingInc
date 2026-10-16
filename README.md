@@ -1,11 +1,12 @@
-# AmpDefInc
+# PhaSingInc
 
-Julia code and plotting scripts for the paper on amplitude defects in
-heterogeneous Stuart–Landau oscillators. The repository reproduces Figures 2–5
-and supplementary plots from the accompanying experimental and numerical data.
-Figure 1's raw experimental data are provided separately on Zenodo.
+Julia code and plotting scripts for *Phase Singularities as a Route to Partial
+Incoherence – From Experiment to Theory*. The repository reproduces main Figures
+2, 3, 4 and 6, together with supplementary plots, from the accompanying data.
+Raw experimental data for Figures 1 and 5 are provided on Zenodo; their plotting
+scripts are not included.
 
-Manuscript citation, dataset DOI and software DOI: **pending publication**.
+Dataset DOI and software DOI: **pending publication**.
 
 ## Installation
 
@@ -27,7 +28,7 @@ the layout in [DATA.md](docs/DATA.md). Then run:
 julia --project=. scripts/plot_figures.jl
 ```
 
-This reads archived data without running simulations and writes Figures 2–5
+This reads archived data without running simulations and writes Figures 2–4 and 6
 as PDF and PNG to `figures/`. To include supplementary plots, use
 `--figures all`; for supplementary plots alone, use `--figures supplementary`.
 Supplementary outputs go to `figures/supplementary/`.
@@ -35,13 +36,13 @@ Supplementary outputs go to `figures/supplementary/`.
 Individual figures and custom directories can be selected, for example:
 
 ```sh
-julia --project=. scripts/plot_figures.jl --figures 2,5 --data-dir /path/to/data --output-dir /path/to/figures
+julia --project=. scripts/plot_figures.jl --figures 2,6 --data-dir /path/to/data --output-dir /path/to/figures
 ```
 
 Quote paths containing spaces. Commands also work in PowerShell. Supplementary
 figure IDs and inputs are listed in [SUPPLEMENTARY.md](docs/SUPPLEMENTARY.md).
 The default font is Times New Roman when available in the Windows font directory,
-otherwise TeX Gyre Heros Makie. Override it with `AMPDEFINC_FONT`.
+otherwise TeX Gyre Heros Makie. Override it with `PHASINGINC_FONT`.
 
 ## Regenerate numerical data
 

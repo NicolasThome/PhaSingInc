@@ -1,5 +1,5 @@
 module SupplementKOP
-using ..AmpDefInc
+using ..PhaSingInc
 using CairoMakie
 using LaTeXStrings
 using Printf
@@ -19,7 +19,7 @@ const LINE_PT = 2.20
 const MARKER_PT = 9.5
 const HIGH_ILLUMINATION_DISPLAY = 1.075
 
-const PAPER_FONT = AmpDefInc.PAPER_FONT
+const PAPER_FONT = PhaSingInc.PAPER_FONT
 
 using ..Figure2: read_first_sheet_xlsx
 

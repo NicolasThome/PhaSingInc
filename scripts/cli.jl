@@ -3,7 +3,7 @@ include(joinpath(@__DIR__, "..", "src", "Selection.jl"))
 function parse_options(args; generation::Bool)
     options = Dict("data-dir" => joinpath(@__DIR__, "..", "data"),
                    "output-dir" => joinpath(@__DIR__, "..", "figures"),
-                   "figures" => "2,3,4,5")
+                   "figures" => join(MAIN_FIGURES, ','))
     flags = Set{String}()
     allowed = generation ? Set(["help", "smoke", "skip-continuation", "continuation-only", "skip-stability", "force"]) : Set(["help", "smoke"])
     i = 1
@@ -23,8 +23,8 @@ function parse_options(args; generation::Bool)
         i += 1
     end
     figures, supplements = parse_figure_selection(options["figures"])
-    ENV["AMPDEFINC_DATA"] = abspath(options["data-dir"])
-    ENV["AMPDEFINC_OUTPUT"] = abspath(options["output-dir"])
+    ENV["PHASINGINC_DATA"] = abspath(options["data-dir"])
+    ENV["PHASINGINC_OUTPUT"] = abspath(options["output-dir"])
     return (; options, flags, figures, supplements)
 end
 
@@ -33,7 +33,8 @@ function print_help(generation)
     println("Usage: julia --project=. scripts/$script [options]")
     println("  --data-dir PATH       data root (default: repository/data)")
     println("  --output-dir PATH     figure root (default: repository/figures)")
-    println("  --figures SELECTION   default: 2,3,4,5; also all or supplementary")
+    println("  --figures SELECTION   default: $(join(MAIN_FIGURES, ',')); also all or supplementary")
+    println("                        Figures 1 and 5: raw experimental data on Zenodo")
     println("                        supplementary IDs: $(join(SUPPLEMENT_IDS, ','))")
     println("  --smoke               small pipeline check, not paper reproduction")
     if generation

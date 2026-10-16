@@ -1,5 +1,5 @@
 module SupplementTimeseries
-using ..AmpDefInc
+using ..PhaSingInc
 using CairoMakie
 using LaTeXStrings
 
@@ -19,7 +19,7 @@ const T_LIMITS = (0.0, 1250.0)
 const T_AXIS_MARGIN = 25.0
 const T_TICKS = ([0, 250, 500, 750, 1000, 1250], ["0", "250", "500", "750", "1000", "1250"])
 
-const PAPER_FONT = AmpDefInc.PAPER_FONT
+const PAPER_FONT = PhaSingInc.PAPER_FONT
 
 using ..Figure2
 read_all_sheets_xlsx(path) = Dict(Figure2.read_all_sheets_xlsx(path))

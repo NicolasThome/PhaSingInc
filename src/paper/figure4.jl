@@ -1,5 +1,5 @@
 module Figure4
-using ..AmpDefInc
+using ..PhaSingInc
 using CairoMakie
 using FFTW
 using JLD2
@@ -11,9 +11,9 @@ using Statistics
 
 
 using ..Figure2: read_first_sheet_xlsx, read_mean_frequency_csv, read_numeric_csv
-const PAPER_FONT = AmpDefInc.PAPER_FONT
+const PAPER_FONT = PhaSingInc.PAPER_FONT
 
-const FIG3_DIR = OUTPUT_ROOT
+const FIG4_DIR = OUTPUT_ROOT
 const EXPERIMENT_XLSX = joinpath(DATA_ROOT, "experimental", "FC_FFT_data.xlsx")
 const NUMERICAL_DIR = joinpath(DATA_ROOT, "numerical")
 const RESTART_DIR = joinpath(NUMERICAL_DIR, "K_continuation_restart")
@@ -21,9 +21,9 @@ const MEAN_FREQUENCY_CSV = joinpath(NUMERICAL_DIR, "K_continuation_mean_frequenc
 const MIN_RADIUS_CSV = joinpath(NUMERICAL_DIR, "K_continuation_min_radius.csv")
 const FFT_BASE_TYPOGRAPHY_TEST = lowercase(get(ENV, "BASE_TYPOGRAPHY_TEST", "false")) == "true"
 const FFT_TYPOGRAPHY_TEST_SUFFIX = FFT_BASE_TYPOGRAPHY_TEST ? "_base_typography_test" : ""
-const FIG4_OUTPUT_STEM = joinpath(FIG3_DIR, "Fig_4" * FFT_TYPOGRAPHY_TEST_SUFFIX)
+const FIG4_OUTPUT_STEM = joinpath(FIG4_DIR, "Fig_4" * FFT_TYPOGRAPHY_TEST_SUFFIX)
 const NUMERIC_CACHE = joinpath(DATA_ROOT, "derived", "fig4_fft.jld2")
-const NUMERIC_SELECTION_REPORT = joinpath(FIG3_DIR, "Fig_3_FFT_numeric_oscillator_selection.txt")
+const NUMERIC_SELECTION_REPORT = joinpath(FIG4_DIR, "Fig_4_FFT_numeric_oscillator_selection.txt")
 
 # The workbook contains a, c, e1, e2. The user requested e2 and to ignore e1.
 # Add :e1 here if you want a literal 4-column workbook mirror.
@@ -229,7 +229,7 @@ function choose_numerical_indices()
 end
 
 function fft_result_for_signal(signal, t)
-    F = AmpDefInc.fft_matrix(
+    F = PhaSingInc.fft_matrix(
         reshape(signal, :, 1),
         t;
         detrend = FFT_DETREND,
@@ -261,7 +261,7 @@ function simulate_selected_restart(K::Real, selected_indices)
     end
     save_idxs = sort(unique(save_idxs))
     p = (restart.K, restart.C1, restart.C2, restart.omega)
-    prob = SciMLBase.ODEProblem(AmpDefInc.Model.sl_harmo_hetero!, restart.u0, (0.0, NUMERIC_TTR + NUMERIC_T), p)
+    prob = SciMLBase.ODEProblem(PhaSingInc.Model.sl_harmo_hetero!, restart.u0, (0.0, NUMERIC_TTR + NUMERIC_T), p)
     saveat = NUMERIC_TTR:NUMERIC_DT:(NUMERIC_TTR + NUMERIC_T)
     sol = SciMLBase.solve(prob, OrdinaryDiffEqTsit5.Tsit5(); saveat, save_idxs, reltol = 1.0e-7, abstol = 1.0e-7)
     mat = Array(sol)'
