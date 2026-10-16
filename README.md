@@ -17,7 +17,6 @@ julia --project=. -e 'using Pkg; Pkg.instantiate()'
 ```
 
 `Project.toml` and `Manifest.toml` specify the dependencies and their versions.
-First installation requires Internet access. No other research repository is needed.
 
 ## Reproduce the figures
 
