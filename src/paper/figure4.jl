@@ -25,12 +25,11 @@ const FIG4_OUTPUT_STEM = joinpath(FIG4_DIR, "Fig_4" * FFT_TYPOGRAPHY_TEST_SUFFIX
 const NUMERIC_CACHE = joinpath(DATA_ROOT, "derived", "fig4_fft.jld2")
 const NUMERIC_SELECTION_REPORT = joinpath(FIG4_DIR, "Fig_4_FFT_numeric_oscillator_selection.txt")
 
-# The workbook contains a, c, e1, e2. The user requested e2 and to ignore e1.
-# Add :e1 here if you want a literal 4-column workbook mirror.
+# Main Figure 4 uses experimental a, c, e1; e2 remains an alternative.
 const COLUMN_SPECS = [
     (key = :a, label = "(a)", numerical_K = 1.0, numerical_role = :one_frequency),
     (key = :c, label = "(b)", numerical_K = 0.955, numerical_role = :post_hopf),
-    (key = :e2, label = "(c)", numerical_K = 0.88, numerical_role = :post_zero),
+    (key = :e1, label = "(c)", numerical_K = 0.88, numerical_role = :post_zero),
 ]
 
 const FORCE_RECOMPUTE_NUMERICS = false
@@ -206,7 +205,7 @@ function choose_numerical_indices()
            k_0[idx] >= ke &&
            min_radius[ic, idx] > R_ZERO_THRESHOLD
     ]
-    isempty(low_candidates) && error("No low-amplitude oscillator satisfies Hopf-before-c and r_min=0-before-e2 criteria.")
+    isempty(low_candidates) && error("No low-amplitude oscillator satisfies Hopf-before-c and r_min=0-before-K=0.88 criteria.")
     low_scores = [(-k_h[idx], -k_0[idx], idx) for idx in low_candidates]
     low_idx = low_candidates[argmin(low_scores)]
 
@@ -326,6 +325,14 @@ function numerical_spectra(; generate::Bool = false)
 
     if isfile(NUMERIC_CACHE) && !generate
         cache = JLD2.load(NUMERIC_CACHE)
+        # Older archives key the same K=0.88 numerical spectra by experimental e2.
+        # Alias in memory only; retain signature/oscillator validation below.
+        if !haskey(cache, "e1") && !haskey(cache, "e1_entries") &&
+           haskey(cache, "e2") && haskey(cache, "e2_entries") &&
+           get(cache["e2"], "K", NaN) == 0.88
+            cache["e1"] = cache["e2"]
+            cache["e1_entries"] = cache["e2_entries"]
+        end
         cache_matches_specs = all(COLUMN_SPECS) do spec
             entries_key = string(spec.key, "_entries")
             haskey(cache, entries_key) &&

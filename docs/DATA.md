@@ -96,6 +96,13 @@ Hopf/radius criteria. Spectra are one-sided amplitude FFTs, with the mean remove
 no window and no extra normalization. Numerical frequency axes are multiplied by
 2π when plotted. Experimental frequencies retain their measured units.
 
+The experimental rows use workbook datasets `a`, `c` and `e1`, respectively.
+For `e1`, the frequency column is 13, signal spectra are columns 14–15, and
+amplitude spectra are columns 16–17 (one-based workbook columns). Dataset `e2`
+remains an alternative and is not plotted by default. Older derived FFT caches
+with `e2` keys remain compatible: those keys refer to the same numerical
+K=0.880 state, so the loader reuses their spectra for the `e1` comparison.
+
 Generated checksums describe the files in that particular archive. A newly
 computed trajectory may differ slightly across hardware or solver versions;
 scientific reproduction should compare numerical observables and figure structure,

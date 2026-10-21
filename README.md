@@ -32,6 +32,11 @@ as PDF and PNG to `figures/`. To include supplementary plots, use
 `--figures all`; for supplementary plots alone, use `--figures supplementary`.
 Supplementary outputs go to `figures/supplementary/`.
 
+Figure 4 uses experimental datasets `a`, `c` and `e1` from `FC_FFT_data.xlsx`;
+`e1` is the default for the third row. Its numerical comparison remains at
+K=0.880. Older numerical FFT archives keyed by `e2` are supported without
+rerunning simulations.
+
 Individual figures and custom directories can be selected, for example:
 
 ```sh
