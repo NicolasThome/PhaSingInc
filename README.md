@@ -1,7 +1,7 @@
 # PhaSingInc
 
 Julia code and plotting scripts for *Phase Singularities as a Route to Partial
-Incoherence – From Experiment to Theory*. The repository reproduces main Figures
+Incoherence in Coupled Oscillators – From Experiment to Theory*. The repository reproduces main Figures
 2, 3, 4 and 6, together with supplementary plots, from the accompanying data.
 Raw experimental data for Figures 1 and 5 are provided on Zenodo; their plotting
 scripts are not included.
